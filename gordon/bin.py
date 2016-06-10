@@ -5,7 +5,7 @@ import argparse
 
 from clint.textui import colored, puts
 
-from .core import Bootstrap, ProjectBuild, ProjectApply, ProjectDelete, ProjectRun
+from .core import Bootstrap, ProjectBuild, ProjectApply, ProjectUpdate, ProjectDelete, ProjectRun
 from .exceptions import BaseGordonException
 
 
@@ -61,7 +61,7 @@ def main(argv=None, stdin=None):
     build_parser.set_defaults(cls=ProjectBuild)
     build_parser.set_defaults(func="build")
 
-    apply_parser = subparsers.add_parser('apply', description='Build')
+    apply_parser = subparsers.add_parser('apply', description='Apply')
     add_default_arguments(apply_parser)
     apply_parser.set_defaults(cls=ProjectApply)
     apply_parser.set_defaults(func="apply")
@@ -75,6 +75,21 @@ def main(argv=None, stdin=None):
                               type=int,
                               default=15,
                               help="CloudFormation timeout.")
+
+    update_parser = subparsers.add_parser('update', description='Update')
+    add_default_arguments(update_parser)
+    update_parser.set_defaults(cls=ProjectUpdate)
+    update_parser.set_defaults(func="update")
+    update_parser.add_argument("-s", "--stage",
+                               dest="stage",
+                               type=stage_validator,
+                               default='dev',
+                               help="Stage where to apply this project")
+    update_parser.add_argument("--cf-timeout",
+                               dest="timeout_in_minutes",
+                               type=int,
+                               default=15,
+                               help="CloudFormation timeout.")
 
     run_parser = subparsers.add_parser('run', description='Run lambda locally')
     add_default_arguments(run_parser)

@@ -501,6 +501,13 @@ class ProjectApply(ProjectApplyLoopBase):
             context[output['OutputKey']] = output['OutputValue']
 
 
+class ProjectUpdate(ProjectBuild, ProjectApply):
+
+    def update(self):
+        self.build()
+        self.apply()
+
+
 class ProjectDelete(ProjectApplyLoopBase):
 
     def __init__(self, *args, **kwargs):
